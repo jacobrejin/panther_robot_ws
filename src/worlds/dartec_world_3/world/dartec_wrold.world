@@ -1,0 +1,399 @@
+<sdf version='1.6'>
+  <world name='default'>
+    
+    <!-- A global light source -->
+    <light type="directional" name="sun">
+      <cast_shadows>false</cast_shadows>
+      <pose>50 0 50 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <!-- <intensity> 1.1 </intensity> -->
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Add the Ground Plane -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+        <!-- <plugin filename="ignition-gazebo-imu-system" name="gz::sim::systems::Imu">
+        </plugin>
+        <plugin filename="ignition-gazebo-sensors-system" name="gz::sim::systems::Sensors">
+        </plugin> -->
+    </model>
+
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Load world -->
+    <include>
+      <uri>model://dartec</uri>
+    </include>
+
+    
+    
+
+    <gui fullscreen='0'>
+      <scene>
+        <ambient>0.7 0.7 0.7 1</ambient>
+        <background>0.7 0.7 0.7 1</background>
+        <shadows>false</shadows>
+      </scene>
+      
+      <camera name='user_camera'>
+        <projection_type>orthographic</projection_type>
+        <pose>0.8 0.0 12.0 0 1.5708 0</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+
+
+    <!-- Add waypoint waypoints -->
+    <model name="wp1">
+      <pose>4.1173 16.2684 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp1_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp1.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>  
+
+    <model name="wp2">
+      <pose>8.5 18 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp2_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp2.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wp3">
+      <pose>5.8600 29.3587 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp3_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp3.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wp4">
+      <pose>14.3590 35.0567 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp4_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp4.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wp5">
+      <pose>14.7822 31.6502 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp4_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp5.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wp6">
+      <pose>15.9510 22.9266 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp4_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp6.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wp7">
+      <pose>18.9063 30.5430 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp4_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp7.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+        <model name="wp8">
+      <pose>35.5772 37.9257 -0.38 0 0 -2.094</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="wp4_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/wp8.stl</uri>
+              <scale>0.009 0.009 0.1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="person1">
+      <pose>6.7686 24.6819 0 0 0 -0.8451</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="p1_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/person1.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="person2">
+      <pose>14.9762 28.4570 0 0 0 -2.1559</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="p2_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/person2.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="person3">
+      <pose>24.4284 33.7177 0 0 0 1.571</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="p3_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/person3.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="ladder1">
+      <pose>2.9515 19.3551 0 0 0 -2.1209</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="l1_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/ladder1.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="ladder2">
+      <pose>34 30.5740 0 0 0 3.142</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="l2_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/ladder2.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle1">
+      <pose>7.1632 33.8513 0 0 0 -2.3562</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="o1_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/obstacle1.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle2">
+      <pose>16.7482 39.4629 0 0 0 4.712</pose>  <!-- Y -X Z -->
+      <static>true</static>
+      <link name="link">
+        <visual name="o2_visual">
+          <geometry>
+            <mesh>
+              <uri>model://dartec/meshes/obstacle2.stl</uri>
+              <scale>0.045 0.045 0.045</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient> 0 0 0 1</ambient>
+            <diffuse> 0 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
