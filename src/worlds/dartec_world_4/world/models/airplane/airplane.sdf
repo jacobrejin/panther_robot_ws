@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<sdf version='1.6'>
+  <model name="airplane">
+    
+    <static>true</static>
+    
+    <link name="airplane_link">
+      
+      <visual name="airplane_visual">
+        <geometry>
+          <mesh>
+            <uri>model://models/airplane/meshes/airplane.STL</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient> 0.6 0.6 0.7 1</ambient>
+          <diffuse> 0.6 0.6 0.7 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+        </material>
+      </visual>
+
+      <collision name="airplane_colission">
+        <geometry>
+          <mesh>
+            <uri>model://models/airplane/meshes/airplane.STL</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <max_contacts>10</max_contacts>
+        <surface>
+          <bounce/>
+          <friction>
+            <ode/>
+          </friction>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      
+    </link>    
+
+  </model> 
+</sdf>
