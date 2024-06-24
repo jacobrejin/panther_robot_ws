@@ -84,6 +84,32 @@ This package contains the panther with the ouster Lidar attached to the frames o
 <hr style="border: 2px solid gray;">
 
 
-# 3. Panther - 3 (LIDAR + UWB Tag)
+# 3. Panther - 3 (UWB Tag)
+
+This package contains the default panther with the UWB Tag attached to the cover Link. Also the package contains the necessary launch files to spawn the robot in the gazebo enviornment. Along with any transforms for topics and visualization message.
+
+
+
+<br>
+<br>
+<br>
+<!-- thick border HR -->
+<hr style="border: 2px solid gray;">
+
+
+# 4. Panther - 4 (LIDAR + UWB Tag)
 
 This package contains the panther with the ouster Lidar attached to the frames on the top. Along with the UWB Tag attached to the cover Link. Also the package contains the necessary launch files to spawn the robot in the gazebo enviornment. Along with any transforms for topics and visualization message.
+
+
+
+
+
+
+# TODO:
+
+1. Make a separate launch file which can be called from other launch files specificaly for the cusotm panther robot to be spawned, along with the necessary transforms and other plugins. And environment variables to be set for the gazebo plugins to work properly.
+
+2. Make sure the custom panther launch file does not have its own world file, but instead use the dartec world file to spawn the robot in the gazebo enviornment.
+
+3. 
