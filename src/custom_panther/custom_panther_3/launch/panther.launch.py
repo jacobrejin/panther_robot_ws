@@ -129,9 +129,17 @@ def generate_launch_description():
                     "dartec_wrold.world",
                 ],
             ),
+            " --render-engine ogre2"
+            # add verbose flag to see all output
+            " --verbose=4",
+            # add sim time flag to use sim time
+            # " --use_sim_time",
         ],
         description="SDF world file",
     )
+
+
+    
 
     pose_x = LaunchConfiguration("pose_x")
     declare_pose_x_arg = DeclareLaunchArgument(
@@ -247,7 +255,10 @@ def generate_launch_description():
     return LaunchDescription(
         [
             AppendEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value = PathJoinSubstitution([FindPackageShare(world_package),"world"])),
+            # SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = "/home/rejin/Desktop/irp/plugin_test/dev_env/uwb_plugin/build"),
             SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = PathJoinSubstitution([FindPackageShare(current_package),"plugin"])),
+            AppendEnvironmentVariable(name='IGN_GAZEBO_RENDER_ENGINE_PATH', value = "/usr/local/lib"),
+
             
             declare_world_arg,
             declare_pose_x_arg,
