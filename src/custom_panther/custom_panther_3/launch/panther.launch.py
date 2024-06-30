@@ -300,5 +300,6 @@ def generate_launch_description():
             gz_bridge,
             gz_spawn_entity,
             bringup_launch,
+            static_transform_publisher
         ]
     )
