@@ -164,7 +164,8 @@ def generate_launch_description():
 
     rot_yaw = LaunchConfiguration("rot_yaw")
     declare_rot_yaw_arg = DeclareLaunchArgument(
-        "rot_yaw", default_value=["1.5708"], description="Initial robot orientation."
+        "rot_yaw", default_value=["0.0"], description="Initial robot orientation."
+        # "rot_yaw", default_value=["1.5708"], description="Initial robot orientation."
     )
 
     publish_robot_state = LaunchConfiguration("publish_robot_state")
@@ -218,6 +219,27 @@ def generate_launch_description():
         ],
         output="screen",
         namespace=namespace,
+    )
+
+    # static_transform_publisher node for world to odom(or map) transform
+    # This feature is implemented to acocunt for the difference in the 
+    # frame names between the gazebo simulation and the real robot
+    # also will be helpful in using the ground truth from the gazebo simulation
+    static_transform_publisher = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="static_transform_publisher",
+        output="screen",
+        arguments=[
+            pose_x,
+            pose_y,
+            pose_z,
+            "0",  # rotation in x
+            "0",  # rotation in y
+            rot_yaw,
+            "world",
+            "odom"  # or "map" based on your requirement
+        ],
     )
 
     gz_bridge = Node(
