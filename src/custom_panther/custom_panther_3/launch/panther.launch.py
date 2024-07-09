@@ -164,7 +164,7 @@ def generate_launch_description():
 
     rot_yaw = LaunchConfiguration("rot_yaw")
     declare_rot_yaw_arg = DeclareLaunchArgument(
-        "rot_yaw", default_value=["0.0"], description="Initial robot orientation."
+        "rot_yaw", default_value=["1.5708"], description="Initial robot orientation."
         # "rot_yaw", default_value=["1.5708"], description="Initial robot orientation."
     )
 
@@ -300,6 +300,6 @@ def generate_launch_description():
             gz_bridge,
             gz_spawn_entity,
             bringup_launch,
-            static_transform_publisher
+            # static_transform_publisher
         ]
     )

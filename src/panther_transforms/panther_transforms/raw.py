@@ -1,45 +1,79 @@
-# THis code was cerated to test the correctness of the uwb baselink transform node.
+# def compute_world_to_odom(self):
+#         if self.current_odom_pose and self.current_baselink_pose_in_world:
+#             try:
+#                 # Step 1: Create a temporary transform from UWB (world) to base
+#                 tmp_tf = tf_transformations.quaternion_from_euler(0, 0, self.initial_yaw)
+#                 tmp_translation = [
+#                     self.current_baselink_pose_in_world.position.x,
+#                     self.current_baselink_pose_in_world.position.y,
+#                     self.current_baselink_pose_in_world.position.z
+#                 ]
+#                 tmp_tf_matrix = tf_transformations.quaternion_matrix(tmp_tf)
+#                 tmp_tf_matrix[:3, 3] = tmp_translation
 
-import numpy as np
-from tf_transformations import quaternion_from_matrix, quaternion_matrix
+#                 # Step 2: Inverse this to get base to UWB (world)
+#                 inv_tmp_tf_matrix = np.linalg.inv(tmp_tf_matrix)
 
-# Given data
-received_pose = [4.355, 15.174, 0.1489]
-received_orientation = [0.0, 0.0, 0.0, 1.0]  # Quaternion (x, y, z, w)
-# create the transformation matrix from the received pose and orientation
-received_transform_matrix = np.array([
-    [1.0, 0.0, 0.0, received_pose[0]],
-    [0.0, 1.0, 0.0, received_pose[1]],
-    [0.0, 0.0, 1.0, received_pose[2]],
-    [0.0, 0.0, 0.0, 1.0]
-])
+#                 # Step 3: Create odom pose matrix
+#                 odom_translation = [
+#                     self.current_odom_pose.position.x,
+#                     self.current_odom_pose.position.y,
+#                     self.current_odom_pose.position.z
+#                 ]
+#                 odom_orientation = [
+#                     self.current_odom_pose.orientation.x,
+#                     self.current_odom_pose.orientation.y,
+#                     self.current_odom_pose.orientation.z,
+#                     self.current_odom_pose.orientation.w
+#                 ]
+#                 odom_matrix = tf_transformations.quaternion_matrix(odom_orientation)
+#                 odom_matrix[:3, 3] = odom_translation
 
-rotation_matrix = np.array([
-    [9.99528981e-01, -3.06890095e-02, -6.18072155e-22, 0.0],
-    [3.06890095e-02, 9.99528981e-01, -5.44358595e-21, 0.0],
-    [7.84839293e-22, 5.42205390e-21, 1.00000000e+00, 0.0],
-    [0.0, 0.0, 0.0, 1.0]
-])
+#                 # Step 4: Compute the odom to map transformation matrix
+#                 odom_to_map_matrix = np.dot(inv_tmp_tf_matrix, odom_matrix)
 
-offset_matrix= np.array([
-    [1.0, 0.0, 0.0, -0.15],
-    [0.0, 1.0, 0.0, -0.2],
-    [0.0, 0.0, 1.0, -0.354],
-    [0.0, 0.0, 0.0, 1.0]
-])
+#                 # Extract translation and rotation
+#                 trans = tf_transformations.translation_from_matrix(odom_to_map_matrix)
+#                 rot = tf_transformations.quaternion_from_matrix(odom_to_map_matrix)
+
+#                 # Step 5: Create and broadcast TransformStamped
+#                 world_to_odom = TransformStamped()
+#                 world_to_odom.header.stamp = self.get_clock().now().to_msg()
+#                 world_to_odom.header.frame_id = "world"
+#                 world_to_odom.child_frame_id = "odom"
+
+#                 world_to_odom.transform.translation.x = trans[0]
+#                 world_to_odom.transform.translation.y = trans[1]
+#                 world_to_odom.transform.translation.z = trans[2]
+#                 world_to_odom.transform.rotation.x = rot[0]
+#                 world_to_odom.transform.rotation.y = rot[1]
+#                 world_to_odom.transform.rotation.z = rot[2]
+#                 world_to_odom.transform.rotation.w = rot[3]
+
+#                 self.tf_broadcaster.sendTransform(world_to_odom)
+#             except Exception as e:
+#                 self.get_logger().error(f"Failed to compute transform: {e}")
 
 
-# Calculate the new transformation matrix by rotating the offset matrix by the rotation matrix
-new_transform_matrix = np.dot(rotation_matrix, offset_matrix)
 
 
 
-# print the new transformation matrix
-print(new_transform_matrix)
-print()
 
-# Calculate the final transformation matrix by multiplying the received transformation matrix with the new transformation matrix
-final_transform_matrix = np.dot(received_transform_matrix, new_transform_matrix)
 
-# print the final transformation matrix
-print(final_transform_matrix)
+# # ================================================================================================================
+
+
+
+#     def compute_world_to_odom(self):
+#         if self.current_odom_pose and self.current_baselink_pose_in_world:
+#             world_to_odom = TransformStamped()
+#             world_to_odom.header.stamp = self.get_clock().now().to_msg()
+#             world_to_odom.header.frame_id = "world"
+#             world_to_odom.child_frame_id = "odom"
+
+#             world_to_odom.transform.translation.x = self.current_baselink_pose_in_world.position.x - self.current_odom_pose.position.x
+#             world_to_odom.transform.translation.y = self.current_baselink_pose_in_world.position.y - self.current_odom_pose.position.y
+#             world_to_odom.transform.translation.z = self.current_baselink_pose_in_world.position.z - self.current_odom_pose.position.z
+
+#             # world_to_odom.transform.rotation = self.compute_relative_orientation(self.current_baselink_pose_in_world.orientation, self.current_odom_pose.orientation)
+#             self.tf_broadcaster.sendTransform(world_to_odom)
