@@ -49,5 +49,22 @@
     xyz="0.15 0.2 0.0"
     rpy="0.0 0.0 0.0" />
 
+  <!-- adding the ground truth publisher plugin to the robot  -->
+  <!-- still need to test out, if its actuall the robots baselink pose -->
+  <!-- also the topic on which the pose is going to be published is not known -->
+  <gazebo>
+    <plugin
+      filename="ignition-gazebo-pose-publisher-system"
+      name="gz::sim::systems::PosePublisher">
+      <publish_link_pose>true</publish_link_pose>
+      <publish_collision_pose>false</publish_collision_pose>
+      <publish_visual_pose>false</publish_visual_pose>
+      <publish_nested_model_pose>false</publish_nested_model_pose>
+      <publish_model_pose>false</publish_model_pose>
+      <update_frequency>10</update_frequency>
+      <use_pose_vector_msg>true</use_pose_vector_msg>
+    </plugin>
+  </gazebo>
+
 
 </robot>

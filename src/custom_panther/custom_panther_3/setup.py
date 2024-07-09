@@ -53,6 +53,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'ground_truth_publisher = custom_panther_3.ground_truth_publisher:main',
         ],
     },
 )
