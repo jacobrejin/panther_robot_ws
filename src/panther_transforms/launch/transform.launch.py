@@ -52,8 +52,8 @@ def generate_launch_description():
 
     uwb_baseink_tf_broadcaster_node = Node(
         package=current_package,
-        executable='uwb_baseink_tf_broadcaster',
-        name='uwb_baseink_tf_broadcaster',
+        executable='uwb_world_baselink_pose_pub',
+        name='uwb_world_baselink_pose_pub',
         parameters=[
             {'use_sim_time': use_sim_time},
             {'rot_yaw': rot_yaw},

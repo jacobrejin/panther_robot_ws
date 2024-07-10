@@ -49,7 +49,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'uwb_baseink_tf_broadcaster = panther_transforms.uwb_baseink_tf_broadcaster:main',
+            'uwb_world_baselink_pose_pub = panther_transforms.uwb_world_baselink_pose_pub:main',
             'uwb_world_to_odom_tf = panther_transforms.uwb_world_to_odom_tf:main',
         ],
     },

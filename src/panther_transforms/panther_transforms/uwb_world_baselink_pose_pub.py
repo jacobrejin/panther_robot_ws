@@ -1,3 +1,6 @@
+# THis node is responsible for transforming the pose of the UWB tag to the base link coordinate in the world frame.
+# The node also takes into account the initial orientaion of the robot (spwan orientation)
+
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, TransformStamped
@@ -7,7 +10,7 @@ import tf2_geometry_msgs
 
 class UWBToBaseLinkPoseTransformer(Node):
     def __init__(self):
-        super().__init__('uwb_to_base_link_pose_transformer')
+        super().__init__('uwb_world_baselink_pose_pub')
 
         # Check if 'use_sim_time' parameter is already declared
         if not self.has_parameter('use_sim_time'):
