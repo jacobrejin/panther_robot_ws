@@ -51,6 +51,7 @@ setup(
         'console_scripts': [
             'uwb_world_baselink_pose_pub = panther_transforms.uwb_world_baselink_pose_pub:main',
             'uwb_world_to_odom_tf = panther_transforms.uwb_world_to_odom_tf:main',
+            'uwb_map_to_odom_tf = panther_transforms.uwb_map_to_odom_tf:main',
         ],
     },
 )

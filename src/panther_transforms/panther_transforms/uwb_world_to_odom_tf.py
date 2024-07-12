@@ -11,12 +11,12 @@ import numpy as np
 
 class WorldOdomTransformBroadcaster(Node):
     def __init__(self):
-        super().__init__('world_odom_transform_broadcaster')
+        super().__init__('uwb_world_to_odom_tf')
 
-        self.get_logger().info("uwb world to odom Node: Started")
+        self.get_logger().info("[uwb_world_to_odom_tf]: Started")
 
         # create a initial yaw parameter
-        self.initial_yaw = self.declare_parameter('rot_yaw', 1.5708).get_parameter_value().double_value
+        self.initial_yaw = self.declare_parameter('rot_yaw', 0.0).get_parameter_value().double_value
         # Check if 'use_sim_time' parameter is already declared
         if not self.has_parameter('use_sim_time'):
             self.declare_parameter('use_sim_time', True)
@@ -37,7 +37,7 @@ class WorldOdomTransformBroadcaster(Node):
         self.initial_rotation_matrix = tf_transformations.euler_matrix(0, 0, self.initial_yaw)
 
         self.create_subscription(Odometry, '/odometry/filtered', self.odometry_callback, 10)
-        self.create_subscription(PoseWithCovarianceStamped, '/uwb/baselink_pose', self.baselink_pose_callback, 10)
+        self.create_subscription(PoseWithCovarianceStamped, '/uwb/world_baselink_pose', self.baselink_pose_callback, 10)
 
         self.timer = self.create_timer(0.5, self.compute_world_to_odom)
 
@@ -125,7 +125,7 @@ class WorldOdomTransformBroadcaster(Node):
 
                 self.tf_broadcaster.sendTransform(world_to_odom)
             except Exception as e:
-                self.get_logger().error(f"Failed to compute transform: {e}")
+                self.get_logger().error(f"[uwb_world_to_odom_tf]: Failed to compute transform - {e}")
 
 
 

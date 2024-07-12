@@ -16,14 +16,16 @@ class UWBToBaseLinkPoseTransformer(Node):
         if not self.has_parameter('use_sim_time'):
             self.declare_parameter('use_sim_time', True)
         self.use_sim_time = self.get_parameter('use_sim_time').get_parameter_value().bool_value
-
+       
         # create a initial yaw parameter
         self.initial_yaw = self.declare_parameter('rot_yaw', 0.0).get_parameter_value().double_value
+        # create a initial z position parameter
+        self.initial_z = self.declare_parameter('pose_z', 0.2).get_parameter_value().double_value
         # Declare and get parameters
         self.uwb_frame_id = self.declare_parameter('uwb_frame_id', 'tag_link_0').get_parameter_value().string_value
         self.base_link_frame_id = self.declare_parameter('base_link_frame_id', 'base_link').get_parameter_value().string_value
         self.pose_topic = self.declare_parameter('pose_topic', 'uwb/pose').get_parameter_value().string_value
-        self.transformed_pose_topic = self.declare_parameter('transformed_pose_topic', 'uwb/baselink_pose').get_parameter_value().string_value
+        self.transformed_pose_topic = self.declare_parameter('transformed_world_pose_topic', 'uwb/world_baselink_pose').get_parameter_value().string_value
         # get the world frame id
         self.world_frame_id = self.declare_parameter('world_frame_id', 'odom').get_parameter_value().string_value
         # create parameter for logging level
@@ -83,8 +85,8 @@ class UWBToBaseLinkPoseTransformer(Node):
                 self.base_link_frame_id,  # Target frame (base_link)
                 rclpy.time.Time()
             )
-            # Convert the static transform to a transformation matrix
-            static_transform_matrix = translation_matrix([
+            # Convert the static transform to a translation matrix
+            static_translation_matrix = translation_matrix([
                 static_transform_base_to_uwb.transform.translation.x,
                 static_transform_base_to_uwb.transform.translation.y,
                 static_transform_base_to_uwb.transform.translation.z
@@ -99,7 +101,7 @@ class UWBToBaseLinkPoseTransformer(Node):
 
 
             # Combine the static translation and rotation matrices
-            static_transformation_matrix = concatenate_matrices(static_transform_matrix, static_rotation_matrix)
+            static_transformation_matrix = concatenate_matrices(static_translation_matrix, static_rotation_matrix)
 
             # rotate the static transformation matrix by the initial yaw of the robot
             static_transformation_matrix_1 = concatenate_matrices(self.initial_rotation_matrix, static_transformation_matrix)
@@ -120,6 +122,8 @@ class UWBToBaseLinkPoseTransformer(Node):
             rotated_transform.transform.translation.x = rotated_translation[0]
             rotated_transform.transform.translation.y = rotated_translation[1]
             rotated_transform.transform.translation.z = rotated_translation[2]
+           
+
             # we only need to apply the resulting translation to the world pose of the Tag, to get the pose of the base link in the world frame
             # so comment out the rotation part
             # rotated_transform.transform.rotation.x = rotated_quaternion[0]
@@ -130,9 +134,11 @@ class UWBToBaseLinkPoseTransformer(Node):
            
             # Transform the pose from the UWB tag frame to the corrected base link frame
             transformed_pose = tf2_geometry_msgs.do_transform_pose_with_covariance_stamped(msg, rotated_transform)
-            
+            # since the z pose is not changed, we can use the original z pose, the one in the intial robot spawn
+            transformed_pose.pose.pose.position.z = self.initial_z
             # Publish the transformed pose
             self.publisher.publish(transformed_pose)
+
 
             if self.logging_level == 1:
                 # print the pose data of the incoming message
@@ -142,6 +148,9 @@ class UWBToBaseLinkPoseTransformer(Node):
 
         except TransformException as ex:
             self.get_logger().warn(f'Could not transform pose: {ex}')
+
+
+
 
 def main(args=None):
     rclpy.init(args=args)
