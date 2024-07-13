@@ -56,7 +56,7 @@ class MapOdomTransformBroadcaster(Node):
 
 
         # Create a transform broadcaster and listener
-        self.tf_broadcaster_world_odom = tf2_ros.TransformBroadcaster(self)
+        self.tf_broadcaster_world_map = tf2_ros.StaticTransformBroadcaster(self)
         # call the fuction to compute the world -> odom transform and publish a static transform
         self.compute_world_to_map()
 
@@ -115,7 +115,7 @@ class MapOdomTransformBroadcaster(Node):
         self.world_to_map.transform.rotation.w = quaternion[3]
 
         # Use the tf broadcaster to publish the transform
-        self.tf_broadcaster_world_odom.sendTransform(self.world_to_map)
+        self.tf_broadcaster_world_map.sendTransform(self.world_to_map)
 
 
     def compute_world_to_map(self):

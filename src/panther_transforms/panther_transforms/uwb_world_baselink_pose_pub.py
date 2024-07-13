@@ -116,7 +116,7 @@ class UWBToBaseLinkPoseTransformer(Node):
             # Create a TransformStamped for the rotated transform
             rotated_transform = TransformStamped()
             rotated_transform.header.stamp = self.get_clock().now().to_msg()
-            rotated_transform.header.frame_id = self.world_frame_id
+            rotated_transform.header.frame_id = "world"
             # rotated_transform.child_frame_id = self.base_link_frame_id + "_corrected"
             rotated_transform.child_frame_id = self.base_link_frame_id
             rotated_transform.transform.translation.x = rotated_translation[0]

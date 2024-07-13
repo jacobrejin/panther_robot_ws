@@ -9,9 +9,8 @@ from launch.conditions import IfCondition, UnlessCondition
 
 current_package = 'panther_transforms'  # Replace with your package name
 
-def generate_launch_description():
 
-    
+def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     declare_use_sim_time_arg = DeclareLaunchArgument(
@@ -180,5 +179,5 @@ def generate_launch_description():
         uwb_baseink_tf_broadcaster_node,
         uwb_world_to_odom_tf_node,
         uwb_map_to_odom_tf_node,
-        # rviz_node,
+        rviz_node,
     ])
