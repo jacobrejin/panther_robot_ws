@@ -11,7 +11,7 @@ def main():
 
     # Activate navigation, since the script implies setup is needed
     navigator.lifecycleStartup()
-    navigator.waitUntilNav2Active()
+    # navigator.waitUntilNav2Active()
 
     waypoints = [
         {"name": "wp1", "x": 1.2684, "y": -0.1173, "rot_z": -0.81, "rot_w": 0.57},

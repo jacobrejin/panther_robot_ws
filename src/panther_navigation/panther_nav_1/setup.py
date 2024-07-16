@@ -38,7 +38,7 @@ setup(
     version='0.0.0',
     packages=find_packages(exclude=['test']),
 
-    data_files=package_files(data_files, ['world/', 'config/']),
+    data_files=package_files(data_files, ['world/', 'config/', 'maps/']),
 
     install_requires=['setuptools'],
     zip_safe=True,
@@ -49,7 +49,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'set_goal = panther_nav_1.set_goal:main',
+            'set_goal = panther_nav_1.set_goals:main',
         ],
     },
 )
