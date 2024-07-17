@@ -9,16 +9,17 @@ class PoseRepublisher(Node):
     def __init__(self):
         super().__init__('pose_republisher')
 
-        # create a paramter for logging level
-        self.declare_parameter('logging_level', 0)
-        self.logging_level = self.get_parameter('logging_level').value
+        # create a paramter for the node
+        self.logging_level = self.declare_parameter('logging_level', 0).get_parameter_value().integer_value
+        self.input_topic = self.declare_parameter('gazebo_ground_truth_topic', '/ground_truth_poses').get_parameter_value().string_value
+        self.output_topic = self.declare_parameter('ground_truth_topic', '/ground_truth_baselink_pose').get_parameter_value().string_value
 
         self.subscription = self.create_subscription(
             PoseArray,
-            '/ground_truth_poses',
+            self.input_topic,
             self.listener_callback,
             10)
-        self.publisher = self.create_publisher(Pose, '/ground_truth_baselink_pose', 10)
+        self.publisher = self.create_publisher(Pose, self.output_topic, 10)
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):

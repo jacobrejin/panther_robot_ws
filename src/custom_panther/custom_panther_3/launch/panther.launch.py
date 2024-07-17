@@ -25,6 +25,7 @@ from launch.substitutions import (
     PythonExpression,
     TextSubstitution,
 )
+from launch.conditions import IfCondition
 from launch_ros.actions import Node, SetParameter
 from launch_ros.substitutions import FindPackageShare
 
@@ -147,6 +148,32 @@ def generate_launch_description():
         "gazebo_verbose_level",
         default_value="0",
         description="Verbose mode for Gazebo",
+    )
+
+    # Declare a launch argument for the ground truth publisher node
+    ground_truth_publisher = LaunchConfiguration("ground_truth_publisher")
+    declare_ground_truth_publisher_arg = DeclareLaunchArgument(
+        "ground_truth_publisher",
+        default_value="true",
+        description="Boolean flag for ground truth publisher node",
+    )
+
+    # Declare launch arguments for the input and output topics
+    gazebo_ground_truth_topic = LaunchConfiguration("gazebo_ground_truth_topic")
+    gazebo_ground_truth_topic_arg = DeclareLaunchArgument(
+        'gazebo_ground_truth_topic',
+        default_value='/ground_truth_poses',
+        description='Input topic for the PoseRepublisher node pose array from the Gazebo simulation \
+                    using the pose publisher plugin'
+    )
+
+
+    ground_truth_topic = LaunchConfiguration("ground_truth_topic")
+    ground_truth_topic_arg = DeclareLaunchArgument(
+        'ground_truth_topic',
+        default_value='/ground_truth_baselink_pose',
+        description='Output topic for the PoseRepublisher node, this is the topic on which the \
+                    PoseRepublisher node will publish the ground truth pose of the robot'
     )
 
     
@@ -286,6 +313,21 @@ def generate_launch_description():
     )
 
 
+    # Create the PoseRepublisher node
+    ground_truth_publisher_node = Node(
+        package=current_package,
+        executable='ground_truth_publisher',
+        name='pose_republisher',
+        parameters=[
+            {'logging_level': 0},
+            {'input_topic': gazebo_ground_truth_topic},
+            {'output_topic': ground_truth_topic}
+        ],
+        # use if condition to check if the ground_truth_publisher node should be launched
+        condition=IfCondition(ground_truth_publisher),
+    )
+
+
     AppendEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value = PathJoinSubstitution([FindPackageShare(world_package),"world"])),
     SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = gz_sim_system_plugin_path),
     # SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = PathJoinSubstitution([FindPackageShare(current_package),"plugin"])),
@@ -294,15 +336,21 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            # required arguments
             declare_world_package_arg,
             declare_gz_sim_system_plugin_path_arg,
             declare_ign_gazebo_render_engine_path_arg,
             declare_gazebo_verbose_level_arg,
+            declare_ground_truth_publisher_arg,
+            gazebo_ground_truth_topic_arg,
+            ground_truth_topic_arg,
             declare_world_arg,
             declare_pose_x_arg,
             declare_pose_y_arg,
             declare_pose_z_arg,
             declare_rot_yaw_arg,
+
+            # can be left at default for the panther
             declare_wheel_type_arg,
             declare_wheel_config_path_arg,
             declare_controller_config_path_arg,
@@ -310,11 +358,15 @@ def generate_launch_description():
             declare_gz_bridge_config_path_arg,
             declare_publish_robot_state_arg,
             declare_namespace_arg,
+
             # Sets use_sim_time for all nodes started below (doesn't work for nodes started from ignition gazebo)
             SetParameter(name="use_sim_time", value=True),
             gz_sim,
             gz_bridge,
             gz_spawn_entity,
             bringup_launch,
+
+            # additonal nodes to be run
+            ground_truth_publisher_node,
         ]
     )
