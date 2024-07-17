@@ -23,6 +23,7 @@ from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
     PythonExpression,
+    TextSubstitution,
 )
 from launch_ros.actions import Node, SetParameter
 from launch_ros.substitutions import FindPackageShare
@@ -33,8 +34,6 @@ from launch_ros.substitutions import FindPackageShare
     
 # define the current package name
 current_package = "custom_panther_3"
-# define the world package name
-world_package = "dartec_world_4"
 
 
 
@@ -117,6 +116,40 @@ def generate_launch_description():
         description="Path to the parameter_bridge configuration file",
     )
 
+    world_package = LaunchConfiguration("world_package")
+    declare_world_package_arg = DeclareLaunchArgument(
+        "world_package",
+        default_value="dartec_world_4",
+        description="Name of the world package to use for the simulation",
+    )
+
+    # Declare a launch argument for the GZ_SIM_SYSTEM_PLUGIN_PATH
+    gz_sim_system_plugin_path = LaunchConfiguration("GZ_SIM_SYSTEM_PLUGIN_PATH")
+    declare_gz_sim_system_plugin_path_arg = DeclareLaunchArgument(
+        "GZ_SIM_SYSTEM_PLUGIN_PATH",
+        default_value="/home/rejin/Desktop/irp/plugin_test/dev_env/uwb_plugin/build",
+        description="Path for the GZ_SIM_SYSTEM_PLUGIN_PATH",
+    )
+
+    # Declare a launch argument for the IGN_GAZEBO_RENDER_ENGINE_PATH
+    ign_gazebo_render_engine_path = LaunchConfiguration("IGN_GAZEBO_RENDER_ENGINE_PATH")
+    declare_ign_gazebo_render_engine_path_arg = DeclareLaunchArgument(
+        "IGN_GAZEBO_RENDER_ENGINE_PATH",
+        default_value="/usr/local/lib",
+        description="Path for the IGN_GAZEBO_RENDER_ENGINE_PATH, ideally gazebo uses the default render engine \
+                    but since we are using the UWB plugin we need to specify the path to the modified render engine \
+                    which has special support for the UWB plugin",
+    )
+
+    # Declare a launch argument for the gazebo verbose level
+    gazebo_verbose_level = LaunchConfiguration("gazebo_verbose_level")
+    declare_gazebo_verbose_level_arg = DeclareLaunchArgument(
+        "gazebo_verbose_level",
+        default_value="0",
+        description="Verbose mode for Gazebo",
+    )
+
+    
     world_cfg = LaunchConfiguration("world")
     declare_world_arg = DeclareLaunchArgument(
         "world",
@@ -129,9 +162,9 @@ def generate_launch_description():
                     "dartec_wrold.world",
                 ],
             ),
-            " --render-engine ogre2"
+            " --render-engine ogre2",
             # add verbose flag to see all output
-            " --verbose=4",
+            TextSubstitution(text=" --verbose="),gazebo_verbose_level,
             # add sim time flag to use sim time
             # " --use_sim_time",
         ],
@@ -165,7 +198,6 @@ def generate_launch_description():
     rot_yaw = LaunchConfiguration("rot_yaw")
     declare_rot_yaw_arg = DeclareLaunchArgument(
         "rot_yaw", default_value=["1.5708"], description="Initial robot orientation."
-        # "rot_yaw", default_value=["1.5708"], description="Initial robot orientation."
     )
 
     publish_robot_state = LaunchConfiguration("publish_robot_state")
@@ -221,27 +253,6 @@ def generate_launch_description():
         namespace=namespace,
     )
 
-    # static_transform_publisher node for world to odom(or map) transform
-    # This feature is implemented to acocunt for the difference in the 
-    # frame names between the gazebo simulation and the real robot
-    # also will be helpful in using the ground truth from the gazebo simulation
-    static_transform_publisher = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_transform_publisher",
-        output="screen",
-        arguments=[
-            pose_x,
-            pose_y,
-            pose_z,
-            "0",  # rotation in x
-            "0",  # rotation in y
-            rot_yaw,
-            "world",
-            "odom"  # or "map" based on your requirement
-        ],
-    )
-
     gz_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
@@ -274,14 +285,19 @@ def generate_launch_description():
         }.items(),
     )
 
+
+    AppendEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value = PathJoinSubstitution([FindPackageShare(world_package),"world"])),
+    SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = gz_sim_system_plugin_path),
+    # SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = PathJoinSubstitution([FindPackageShare(current_package),"plugin"])),
+    AppendEnvironmentVariable(name='IGN_GAZEBO_RENDER_ENGINE_PATH', value = ign_gazebo_render_engine_path),
+
+
     return LaunchDescription(
         [
-            AppendEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value = PathJoinSubstitution([FindPackageShare(world_package),"world"])),
-            SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = "/home/rejin/Desktop/irp/plugin_test/dev_env/uwb_plugin/build"),
-            # SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = PathJoinSubstitution([FindPackageShare(current_package),"plugin"])),
-            AppendEnvironmentVariable(name='IGN_GAZEBO_RENDER_ENGINE_PATH', value = "/usr/local/lib"),
-
-            
+            declare_world_package_arg,
+            declare_gz_sim_system_plugin_path_arg,
+            declare_ign_gazebo_render_engine_path_arg,
+            declare_gazebo_verbose_level_arg,
             declare_world_arg,
             declare_pose_x_arg,
             declare_pose_y_arg,
@@ -300,6 +316,5 @@ def generate_launch_description():
             gz_bridge,
             gz_spawn_entity,
             bringup_launch,
-            # static_transform_publisher
         ]
     )
