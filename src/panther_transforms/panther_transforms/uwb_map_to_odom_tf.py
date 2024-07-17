@@ -38,7 +38,10 @@ class MapOdomTransformBroadcaster(Node):
         # get other parameters
         self.use_sim_time = self.get_parameter('use_sim_time').get_parameter_value().bool_value
         self.use_offset_values = self.declare_parameter('use_offset_values', True).get_parameter_value().bool_value
-        self.transformed_pose_topic = self.declare_parameter('transformed_map_pose_topic', 'uwb/map_baselink_pose').get_parameter_value().string_value
+        self.transformed_map_pose_topic = self.declare_parameter('transformed_map_pose_topic', 'uwb/map_baselink_pose').get_parameter_value().string_value
+        self.odom_topic = self.declare_parameter('odom_topic', '/odometry/filtered').get_parameter_value().string_value
+        self.transformed_world_pose_topic = self.declare_parameter('transformed_world_pose_topic', 'uwb/world_baselink_pose').get_parameter_value().string_value
+
 
 
         # Create a TF buffer and listener
@@ -51,8 +54,8 @@ class MapOdomTransformBroadcaster(Node):
         # variables to store various poses
         self.current_odom_pose = None
         self.current_baselink_pose_in_world = None
-        self.create_subscription(Odometry, '/odometry/filtered', self.odometry_callback, 10)
-        self.create_subscription(PoseWithCovarianceStamped, '/uwb/world_baselink_pose', self.baselink_pose_callback, 10)
+        self.create_subscription(Odometry, self.odom_topic, self.odometry_callback, 10)
+        self.create_subscription(PoseWithCovarianceStamped, self.transformed_world_pose_topic, self.baselink_pose_callback, 10)
 
 
         # Create a transform broadcaster and listener
@@ -63,7 +66,7 @@ class MapOdomTransformBroadcaster(Node):
         # Publisher for transformed pose
         self.publisher = self.create_publisher(
             PoseWithCovarianceStamped,
-            self.transformed_pose_topic,
+            self.transformed_map_pose_topic,
             10
         )
 

@@ -17,22 +17,14 @@ def generate_launch_description():
         'use_sim_time', default_value='true', description='Use simulation time')
     
 
-    # # Retrieve the value of the launch argument
-    # zero_initial_pose = LaunchConfiguration('zero_initial_pose')
-    # # Declare the launch argument for zeroing the initial pose
-    # declare_zero_initial_pose_arg = DeclareLaunchArgument(
-    #     'zero_initial_pose',
-    #     default_value='false',
-    #     description='If true, zero the pose data at the initial offset'
-    # )
-
-    publish_map_to_baselink = LaunchConfiguration('publish_map_to_baselink')
     # Declare the launch argument for zeroing the initial pose
+    publish_map_to_baselink = LaunchConfiguration('publish_map_to_baselink')
     declare_publish_map_to_baselink_arg = DeclareLaunchArgument(
         'publish_map_to_baselink',
         default_value='true',
         description='If true, we will run the approproate node to pubslish the map -> base_link tf \
-        else we will run the world -> base_link tf node'
+                    else we will run the world -> base_link tf node. The map->basleink publishing node will also \
+                    publish the world -> map tf. using the initial offset values'
     )
 
     
@@ -63,8 +55,8 @@ def generate_launch_description():
     # TODO: Add detailed comment
     use_offset_values = LaunchConfiguration('use_offset_values')
     declare_use_offset_values_arg = DeclareLaunchArgument(
-        'use_offset_values', default_value='true', description='This parameter when use with the sim time as false, \
-            will tell the node to use the offset values specifed instead of the  UWB measured offset values at the start.')
+        'use_offset_values', default_value='true', description='This parameter when used will tell the node \
+        to use the offset values specifed in the launch file instead of the  UWB measured offset values at the start.')
 
     uwb_frame_id = LaunchConfiguration('uwb_frame_id')
     declare_uwb_frame_id_arg = DeclareLaunchArgument(
@@ -85,10 +77,15 @@ def generate_launch_description():
     transformed_map_pose_topic = LaunchConfiguration('transformed_map_pose_topic')
     declare_transformed_map_pose_topic = DeclareLaunchArgument(
         'transformed_map_pose_topic', default_value='uwb/map_baselink_pose', description='Transformed pose topic of the base link')
+    
+    odom_topic = LaunchConfiguration('odom_topic')
+    declare_odom_topic_name = DeclareLaunchArgument(
+        'odom_topic', default_value='odom', description='odom topic name')
 
     world_frame_id = LaunchConfiguration('world_frame_id')
     declare_world_frame_id_arg = DeclareLaunchArgument(
-        'world_frame_id', default_value='odom', description='World frame ID')
+        'world_frame_id', default_value='odom', description='World frame ID, this is used by the uwb_world_baselink_pose_pub node \
+            to get the rotation of the robot, it can be wrt to the odom frame or the map frame(if we have the map->odom tf being published)')
 
     logging_level = LaunchConfiguration('logging_level')
     declare_logging_level_arg = DeclareLaunchArgument(
@@ -130,6 +127,8 @@ def generate_launch_description():
         parameters=[
             {'use_sim_time': use_sim_time},
             {'rot_yaw': rot_yaw},
+            {'odom_topic': odom_topic},
+            {'transformed_world_pose_topic': transformed_world_pose_topic},
         ],
         condition = UnlessCondition(publish_map_to_baselink)
     )
@@ -145,6 +144,8 @@ def generate_launch_description():
             {'pose_x': pose_x},
             {'pose_y': pose_y},
             {'pose_z': pose_z},
+            {'odom_topic': odom_topic},
+            {'transformed_world_pose_topic': transformed_world_pose_topic},
             {'use_offset_values': use_offset_values},
             {'transformed_map_pose_topic': transformed_map_pose_topic}
         ],
@@ -179,5 +180,5 @@ def generate_launch_description():
         uwb_baseink_tf_broadcaster_node,
         uwb_world_to_odom_tf_node,
         uwb_map_to_odom_tf_node,
-        rviz_node,
+        # rviz_node,
     ])

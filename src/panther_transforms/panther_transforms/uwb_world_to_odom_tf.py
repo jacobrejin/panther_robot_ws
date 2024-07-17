@@ -30,14 +30,16 @@ class WorldOdomTransformBroadcaster(Node):
 
         # Get the parameters
         self.use_sim_time = self.get_parameter('use_sim_time').get_parameter_value().bool_value
+        self.odom_topic = self.declare_parameter('odom_topic', '/odometry/filtered').get_parameter_value().string_value
+        self.transformed_pose_topic = self.declare_parameter('transformed_world_pose_topic', 'uwb/world_baselink_pose').get_parameter_value().string_value
 
 
 
         # compute initial orientation matrix (rotation matrix)
         self.initial_rotation_matrix = tf_transformations.euler_matrix(0, 0, self.initial_yaw)
 
-        self.create_subscription(Odometry, '/odometry/filtered', self.odometry_callback, 10)
-        self.create_subscription(PoseWithCovarianceStamped, '/uwb/world_baselink_pose', self.baselink_pose_callback, 10)
+        self.create_subscription(Odometry, self.odom_topic, self.odometry_callback, 10)
+        self.create_subscription(PoseWithCovarianceStamped, self.transformed_pose_topic, self.baselink_pose_callback, 10)
 
         self.timer = self.create_timer(0.5, self.compute_world_to_odom)
 

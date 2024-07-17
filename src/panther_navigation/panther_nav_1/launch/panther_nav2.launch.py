@@ -48,7 +48,7 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file', 
-        default_value=os.path.join(get_package_share_directory(current_packagge), 'config', 'nav2_param_test1.yaml'),
+        default_value=os.path.join(get_package_share_directory(current_packagge), 'config', 'nav2_param.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes'
     )
 

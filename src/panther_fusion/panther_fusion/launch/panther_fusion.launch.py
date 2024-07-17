@@ -16,7 +16,7 @@ def generate_launch_description():
     param_file = LaunchConfiguration("param_file")
     param_file_arg = DeclareLaunchArgument(
         "param_file",
-        default_value='ekf_panther_uwb_1',
+        default_value='panther_fusion_uwb_1',
         description='Name of the parameter file to use, also the name used for the ekf node being run',
     )
 
