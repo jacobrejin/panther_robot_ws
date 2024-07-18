@@ -141,6 +141,8 @@ class UWBToBaseLinkPoseTransformer(Node):
 
 
             if self.logging_level == 1:
+                # print loggin level
+                self.get_logger().info(f'{self.logging_level}')
                 # print the pose data of the incoming message
                 self.get_logger().info(f"Received pose: {msg.pose.pose.position.x}, {msg.pose.pose.position.y}, {msg.pose.pose.position.z}")
                 # print the orientation data of the incoming message

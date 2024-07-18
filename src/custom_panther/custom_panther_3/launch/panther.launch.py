@@ -191,7 +191,9 @@ def generate_launch_description():
             ),
             " --render-engine ogre2",
             # add verbose flag to see all output
-            TextSubstitution(text=" --verbose="),gazebo_verbose_level,
+            # TextSubstitution(text=" --verbose="),gazebo_verbose_level,
+            " --verbose=", gazebo_verbose_level,
+            # " --verbose=4"
             # add sim time flag to use sim time
             # " --use_sim_time",
         ],
@@ -328,11 +330,7 @@ def generate_launch_description():
     )
 
 
-    AppendEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value = PathJoinSubstitution([FindPackageShare(world_package),"world"])),
-    SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = gz_sim_system_plugin_path),
-    # SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = PathJoinSubstitution([FindPackageShare(current_package),"plugin"])),
-    AppendEnvironmentVariable(name='IGN_GAZEBO_RENDER_ENGINE_PATH', value = ign_gazebo_render_engine_path),
-
+   
 
     return LaunchDescription(
         [
@@ -344,13 +342,13 @@ def generate_launch_description():
             declare_ground_truth_publisher_arg,
             gazebo_ground_truth_topic_arg,
             ground_truth_topic_arg,
-            declare_world_arg,
             declare_pose_x_arg,
             declare_pose_y_arg,
             declare_pose_z_arg,
             declare_rot_yaw_arg,
 
             # can be left at default for the panther
+            declare_world_arg,
             declare_wheel_type_arg,
             declare_wheel_config_path_arg,
             declare_controller_config_path_arg,
@@ -358,6 +356,13 @@ def generate_launch_description():
             declare_gz_bridge_config_path_arg,
             declare_publish_robot_state_arg,
             declare_namespace_arg,
+
+            # set the environment variables before the nodes are launched
+            AppendEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value = PathJoinSubstitution([FindPackageShare(world_package),"world"])),
+            SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = gz_sim_system_plugin_path),
+            # SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value = PathJoinSubstitution([FindPackageShare(current_package),"plugin"])),
+            AppendEnvironmentVariable(name='IGN_GAZEBO_RENDER_ENGINE_PATH', value = ign_gazebo_render_engine_path),
+
 
             # Sets use_sim_time for all nodes started below (doesn't work for nodes started from ignition gazebo)
             SetParameter(name="use_sim_time", value=True),

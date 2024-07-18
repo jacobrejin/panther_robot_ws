@@ -20,7 +20,6 @@ class PoseRepublisher(Node):
             self.listener_callback,
             10)
         self.publisher = self.create_publisher(Pose, self.output_topic, 10)
-        self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
         if msg.poses:

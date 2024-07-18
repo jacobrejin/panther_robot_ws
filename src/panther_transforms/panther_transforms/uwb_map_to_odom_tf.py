@@ -41,8 +41,7 @@ class MapOdomTransformBroadcaster(Node):
         self.transformed_map_pose_topic = self.declare_parameter('transformed_map_pose_topic', 'uwb/map_baselink_pose').get_parameter_value().string_value
         self.odom_topic = self.declare_parameter('odom_topic', '/odometry/filtered').get_parameter_value().string_value
         self.transformed_world_pose_topic = self.declare_parameter('transformed_world_pose_topic', 'uwb/world_baselink_pose').get_parameter_value().string_value
-
-
+        self.logging_level = self.declare_parameter('logging_level', 0).get_parameter_value().integer_value
 
         # Create a TF buffer and listener
         self.tf_buffer = tf2_ros.Buffer()
@@ -70,8 +69,6 @@ class MapOdomTransformBroadcaster(Node):
             10
         )
 
-        # self.timer = self.create_timer(0.5, self.compute_world_to_odom)
-
 
     def odometry_callback(self, msg):
         self.current_odom_pose = msg.pose.pose
@@ -82,19 +79,17 @@ class MapOdomTransformBroadcaster(Node):
         try:
             # invert world to map transformstamped
             self.map_to_world = self.tf_buffer.lookup_transform('map', 'world', rclpy.time.Time())
-            # print he transform
-            self.get_logger().info(f'map to world TF: {self.map_to_world}')
             # Transform the pose from the UWB tag frame to the corrected base link frame
             transformed_pose = tf2_geometry_msgs.do_transform_pose_with_covariance_stamped(msg, self.map_to_world)
             # set the z of the transformed pose to the intial z offset, as we do not have any z movevement, robot is 2d
             transformed_pose.pose.pose.position.z = self.initial_z
-            # log the pose msgs x, y and z
-            self.get_logger().info(f'map->basleink Pose: {transformed_pose}')
             # Publish the transformed pose
             self.publisher.publish(transformed_pose)
+            if self.logging_level > 0:
+                self.get_logger().info(f'map to world TF: {self.map_to_world}')
+                self.get_logger().info(f'map->basleink Pose: {transformed_pose}')
         except Exception as e:
             self.get_logger().error(f'Could not transform baselink pose: {str(e)}')
-
 
 
     def publish_world_to_map_sim(self):

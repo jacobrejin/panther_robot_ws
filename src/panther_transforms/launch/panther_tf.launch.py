@@ -71,15 +71,15 @@ def generate_launch_description():
         'pose_topic', default_value='uwb/pose', description='Pose topic of the UWB sensor')
 
     transformed_world_pose_topic = LaunchConfiguration('transformed_world_pose_topic')
-    declare_transformed_world_pose_topic = DeclareLaunchArgument(
+    declare_transformed_world_pose_topic_arg = DeclareLaunchArgument(
         'transformed_world_pose_topic', default_value='uwb/world_baselink_pose', description='Transformed pose topic of the base link')
     
     transformed_map_pose_topic = LaunchConfiguration('transformed_map_pose_topic')
-    declare_transformed_map_pose_topic = DeclareLaunchArgument(
+    declare_transformed_map_pose_topic_arg = DeclareLaunchArgument(
         'transformed_map_pose_topic', default_value='uwb/map_baselink_pose', description='Transformed pose topic of the base link')
     
     odom_topic = LaunchConfiguration('odom_topic')
-    declare_odom_topic_name = DeclareLaunchArgument(
+    declare_odom_topic_name_arg = DeclareLaunchArgument(
         'odom_topic', default_value='odom', description='odom topic name')
 
     world_frame_id = LaunchConfiguration('world_frame_id')
@@ -114,7 +114,7 @@ def generate_launch_description():
             {'pose_topic': pose_topic},
             {'transformed_world_pose_topic': transformed_world_pose_topic},
             {'world_frame_id': world_frame_id},
-            {'logging_level': 1},
+            {'logging_level': logging_level},
         ]
     )
 
@@ -147,7 +147,8 @@ def generate_launch_description():
             {'odom_topic': odom_topic},
             {'transformed_world_pose_topic': transformed_world_pose_topic},
             {'use_offset_values': use_offset_values},
-            {'transformed_map_pose_topic': transformed_map_pose_topic}
+            {'transformed_map_pose_topic': transformed_map_pose_topic},
+            {'logging_level': logging_level},
         ],
         condition = IfCondition(publish_map_to_baselink)
     )
@@ -172,8 +173,9 @@ def generate_launch_description():
         declare_uwb_frame_id_arg,
         declare_base_link_frame_id_arg,
         declare_pose_topic_arg,
-        declare_transformed_world_pose_topic,
-        declare_transformed_map_pose_topic,
+        declare_transformed_world_pose_topic_arg,
+        declare_transformed_map_pose_topic_arg,
+        declare_odom_topic_name_arg,
         declare_world_frame_id_arg,
         declare_logging_level_arg,
         declare_rviz_config_file_arg,
