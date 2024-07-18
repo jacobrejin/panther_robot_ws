@@ -160,6 +160,6 @@ def generate_launch_description():
         [
             panther_launch,
             panther_tf_launch,
-            panther_fusion_launch
+            # panther_fusion_launch
         ]
     )
