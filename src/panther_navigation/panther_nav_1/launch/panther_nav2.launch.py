@@ -70,7 +70,7 @@ def generate_launch_description():
         'use_respawn', default_value='False', description='Whether to respawn if a node crashes')
 
     declare_log_level_cmd = DeclareLaunchArgument(
-        'log_level', default_value='info', description='Log level')
+        'log_level', default_value='warn', description='Log level')
 
     # Set environment variable for logging
     stdout_linebuf_envvar = SetEnvironmentVariable(

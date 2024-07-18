@@ -65,10 +65,15 @@ def generate_launch_description():
     transformed_map_pose_topic = 'uwb/map_baselink_pose'
     odom_topic = 'odom'
     world_frame_id = 'odom'
-    logging_level = '1'
+    logging_level = '0'
 
     # define the parameters required for the panther fusion package
     panther_fusion_package = "panther_fusion"
+
+    # define the parameters required for the panther navigation package
+    panther_navigation_package = "panther_nav_1"
+    logging_level_nav2 = "warn"
+
 
 
 
@@ -103,7 +108,7 @@ def generate_launch_description():
 
     # Launch the custom panther robot with the appropiate world selected
     panther_tf_launch = TimerAction(
-        period=7.0,
+        period=8.0,
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
@@ -136,7 +141,6 @@ def generate_launch_description():
         ]
     )
 
-
     # Launch the panther fusion package
     panther_fusion_launch = TimerAction(
         period=10.0,
@@ -155,11 +159,34 @@ def generate_launch_description():
         ]
     )
 
+    # Launch the panther navigation package
+    panther_navigation_launch = TimerAction(
+        period=12.0,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution(
+                        [
+                            FindPackageShare(panther_navigation_package),
+                            "launch",
+                            "panther_nav2.launch.py",
+                        ]
+                    )
+                ),
+                launch_arguments={
+                    "use_sim_time": use_sim_time,
+                    "log_level": logging_level_nav2,
+                }.items(),
+            )
+        ]
+    )
+
 
     return LaunchDescription(
         [
             panther_launch,
             panther_tf_launch,
-            # panther_fusion_launch
+            panther_fusion_launch,
+            panther_navigation_launch,
         ]
     )
