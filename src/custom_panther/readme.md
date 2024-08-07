@@ -88,6 +88,8 @@ This package contains the panther with the ouster Lidar attached to the frames o
 
 This package contains the default panther with the UWB Tag attached to the cover Link. Also the package contains the necessary launch files to spawn the robot in the gazebo enviornment. Along with any transforms for topics and visualization message.
 
+Along with the UWB plugin model, the urdf file also has the code to add the UWB plugin to the robot model, which does all the UWB simulation related stuff. (make sure to set the appropriate path for the plugin as per the documentaion of the plugin)
+
 The custom panther has the `Ground Truth Publisher` plugin addde to get the ground truth of the pather from the gazebo, it has certain nodes to help in this process. For more details read the package readme file, the section about the `Ground Truth Publisher` plugin. 
 
 
@@ -95,6 +97,7 @@ The custom panther has the `Ground Truth Publisher` plugin addde to get the grou
 <br>
 <br>
 <!-- thick border HR -->
+
 <hr style="border: 2px solid gray;">
 
 
@@ -102,6 +105,13 @@ The custom panther has the `Ground Truth Publisher` plugin addde to get the grou
 
 This package contains the panther with the ouster Lidar attached to the frames on the top. Along with the UWB Tag attached to the cover Link. Also the package contains the necessary launch files to spawn the robot in the gazebo enviornment. Along with any transforms for topics and visualization message.
 
+
+
+<br>
+<br>
+<br>
+<!-- thick border HR -->
+<hr style="border: 2px solid gray;">
 
 
 

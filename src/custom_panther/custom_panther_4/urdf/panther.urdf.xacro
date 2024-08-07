@@ -43,11 +43,21 @@
   <!-- Additional code for getting the UWB Tag -->
   <!-- We need define the parent link to which the lidar is going to be attached -->
   <!-- we are setting the Tag to the cover link(this is provided by the panther team and is also physically available) -->
-  <xacro:include filename="$(find custom_panther_3)/urdf/uwb_tag.urdf.xacro" ns="uwb_tag" />
+  <xacro:include filename="$(find custom_panther_4)/urdf/uwb_tag.urdf.xacro" ns="uwb_tag" />
   <xacro:uwb_tag.uwb_tag_model
     parent_link="cover_link"
     xyz="0.15 0.2 0.0"
     rpy="0.0 0.0 0.0" />
+
+  <!-- additional code for getting the Ouster-32 Lidar -->
+  <!-- We need define the parent link to which the lidar is going to be attached -->
+  <xacro:include filename="$(find custom_panther_4)/urdf/ouster_os1_32.urdf.xacro" ns="lidar" />
+  <xacro:lidar.ouster_os1_32
+    parent_link="cover_link"
+    xyz="0.0 0.0 0.0"
+    rpy="0.0 0.0 0.0"
+    use_gpu="true"
+    simulation_engine="$(arg simulation_engine)" />
 
   <!-- adding the ground truth publisher plugin to the robot  -->
   <!-- still need to test out, if its actuall the robots baselink pose -->
