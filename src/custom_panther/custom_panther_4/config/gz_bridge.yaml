@@ -14,13 +14,13 @@
   publisher_queue: 10
   direction: GZ_TO_ROS
 
-
-# # gz topic published by Sensors plugin
-# - ros_topic_name: "pointcloud2"
-#   gz_topic_name: "scan"
-#   ros_type_name: "sensor_msgs/msg/LaserScan"
-#   gz_type_name: "gz.msgs.LaserScan"
-#   direction: GZ_TO_ROS
+# gz topic to bridge the pose msg published by the plugin (groudn truth)
+# But the plugin publishes all the poses of the model, so we need to filter the one we want in the RO2 node later
+- ros_topic_name: "ground_truth_poses"
+  gz_topic_name: "/world/default/dynamic_pose/info"
+  ros_type_name: "geometry_msgs/msg/PoseArray"
+  gz_type_name: "ignition.msgs.Pose_V"
+  direction: GZ_TO_ROS
 
 
 # gz topic published by Sensors plugin for lidar (these are the points)
@@ -30,18 +30,18 @@
   gz_type_name: "ignition.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
+
+# # gz topic published by Sensors plugin
+# - ros_topic_name: "pointcloud2"
+#   gz_topic_name: "scan"
+#   ros_type_name: "sensor_msgs/msg/LaserScan"
+#   gz_type_name: "gz.msgs.LaserScan"
+#   direction: GZ_TO_ROS
+
+
 # # gz topic published by Sensors plugin (for lidar) these are the laserscan type messages
 # - ros_topic_name: "LaserScan"
 #   gz_topic_name: "world/default/model/panther/link/base_link/sensor/ouster_os1_32_sensor/scan/points"
 #   ros_type_name: "sensor_msgs/msg/LaserScan"
 #   gz_type_name: "ignition.msgs.LaserScan"
 #   direction: GZ_TO_ROS
-
-
-# gz topic to bridge the pose msg published by the plugin (groudn truth)
-# But the plugin publishes all the poses of the model, so we need to filter the one we want in the RO2 node later
-- ros_topic_name: "ground_truth_poses"
-  gz_topic_name: "/world/default/dynamic_pose/info"
-  ros_type_name: "geometry_msgs/msg/PoseArray"
-  gz_type_name: "ignition.msgs.Pose_V"
-  direction: GZ_TO_ROS
