@@ -42,6 +42,8 @@
       <direction>-0.5 0.1 -0.9</direction>
     </light>
 
+    
+
     <!-- Add the Ground Plane -->
     <model name="ground_plane">
       <static>true</static>

@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<sdf version='1.6'>
+  <model name="building">
+    <static>true</static>
+    
+    <link name="building">
+      <visual name="building_visual">
+        <geometry>
+          <mesh>
+            <uri>model://models/building/meshes/building.stl</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient> 0.6 0.6 0.7 1</ambient>
+          <diffuse> 0.6 0.6 0.7 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+        </material>
+      </visual>
+
+      <collision name="building_colission">
+        <geometry>
+          <mesh>
+            <uri>model://models/building/meshes/building.stl</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <max_contacts>10</max_contacts>
+        <surface>
+          <bounce/>
+          <friction>
+            <ode/>
+          </friction>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+    
+    </link>
+     
+  </model> 
+</sdf>

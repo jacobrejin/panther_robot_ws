@@ -33,7 +33,7 @@
 
     <gazebo>
         <plugin name="UwbPlugin" filename="uwb_plugin">
-          <update_rate>0.5</update_rate>
+          <update_rate>4</update_rate>
           <beacon_prefix>uwb_beacon_</beacon_prefix>
           <tag_link>tag_link_0</tag_link>
           <tag_id>0</tag_id>
